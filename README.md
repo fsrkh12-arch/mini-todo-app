@@ -1,5 +1,4 @@
 # TODO LIST
-#### Video Demo:  <https://youtu.be/oLaeoOmTcmw>
 #### This is a simple web app where you can keep track of all the things you need to do. Basically, it’s a to-do list that lives on the internet, so you can access it from anywhere. You can make an account, log in, and have your own list that nobody else can see. You sign up with a username and a password. The password is kept safe and secure, so even if someone got access to the database, they wouldn’t be able to read it. After signing up, your information is saved in a database. Then, whenever you log in, the app knows who you are and shows your tasks. Only you can see your list, which keeps everything private.
 
 # When you log in, you are taken to a page that shows all the tasks you have added. It’s just a simple list, but it does the job. You can type a new task in a box, click a button, and it’s added to your list. The app saves it in the database with your user ID, so it knows which tasks belong to which user. Every task is tied to your account. Other users cannot see your tasks or change them in any way, which is nice because it keeps your stuff private and separate.
