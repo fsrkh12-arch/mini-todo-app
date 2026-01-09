@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+
+<html>
+
+<div class="container">
+<head>
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Todo App</title>
+</head>
+<body>
+    <h1>Good day!</h1>
+    <h3>Add a Task!</h3>
+
+    <form action="/" method="POST">
+    <input type="text" name="task" placeholder="Enter a task" required>
+    <button type="submit">Add Task</button></form>
+
+    <h2>Remaining Tasks:</h2>
+    <ul>
+    {% for task in tasks %}
+        <li>
+            {{ task.task }}
+            <!-- Delete button -->
+            <form action="/delete" method="POST" style="position: 0; top: 0;">
+                <input type="hidden" name="id" value="{{ task.id }}">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+{% if session.user_id %}
+    <form action="/logout" method="get">
+        <button type="submit">Logout</button>
+    </form>
+{% endif %}
+
+
+
+</body>
+</div>
+</html>
