@@ -1,23 +1,33 @@
+import os
+from functools import wraps
+
 from flask import Flask, render_template, request, redirect, session, flash
 from cs50 import SQL
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.secret_key = "replace_with_a_random_secret_key"  # needed to keep all the sessions in track
+app.secret_key = os.environ.get("SECRET_KEY", os.urandom(32))
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
 # Connect to database
 db = SQL("sqlite:///tasks.db")
 
-@app.route("/", methods=["GET", "POST"])
-def index():
-    # User must be logged in
-    if "user_id" not in session:
-        return redirect("/login")
+def login_required(view):
+    @wraps(view)
+    def wrapped_view(*args, **kwargs):
+        if "user_id" not in session:
+            return redirect("/login")
+        return view(*args, **kwargs)
+    return wrapped_view
 
+@app.route("/", methods=["GET", "POST"])
+@login_required
+def index():
     if request.method == "POST":
-        task = request.form.get("task")
+        task = request.form.get("task", "").strip()
         if task:  # only insert if not empty
-            db.execute("INSERT INTO tasks (task, user_id) VALUES (?, ?)", task, session["user_id"])
+            db.execute("INSERT INTO tasks (task, user_id) VALUES (?, ?)", task[:200], session["user_id"])
         return redirect("/")
 
     # Get tasks for logged-in user
@@ -26,6 +36,7 @@ def index():
 
 
 @app.route("/delete", methods=["POST"])
+@login_required
 def delete():
     task_id = request.form.get("id")
     db.execute("DELETE FROM tasks WHERE id = ? AND user_id = ?", task_id, session["user_id"])
@@ -35,7 +46,7 @@ def delete():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        username = request.form.get("username")
+        username = request.form.get("username", "").strip()
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
 
@@ -46,16 +57,20 @@ def register():
         if password != confirmation:
             flash("Passwords do not match")
             return render_template("register.html")
-
-        # Hash password
-        hash_pw = generate_password_hash(password)
-
-        # Insert into DB
-        try:
-            user_id = db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, hash_pw)
-        except:
+        if len(username) < 3 or len(username) > 40:
+            flash("Username must be 3 to 40 characters")
+            return render_template("register.html")
+        if len(password) < 8:
+            flash("Password must be at least 8 characters")
+            return render_template("register.html")
+        if db.execute("SELECT id FROM users WHERE username = ?", username):
             flash("Username already taken")
             return render_template("register.html")
+
+        # Werkzeug hashes passwords before they are stored.
+        hash_pw = generate_password_hash(password)
+
+        user_id = db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, hash_pw)
 
         session["user_id"] = user_id
         return redirect("/")
@@ -65,10 +80,8 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    session.clear()  # forget any previous user
-
     if request.method == "POST":
-        username = request.form.get("username")
+        username = request.form.get("username", "").strip()
         password = request.form.get("password")
 
         if not username or not password:
@@ -80,6 +93,7 @@ def login():
             flash("Invalid username or password")
             return render_template("login.html")
 
+        session.clear()
         session["user_id"] = rows[0]["id"]
         return redirect("/")
 
