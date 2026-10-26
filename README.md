@@ -4,7 +4,7 @@
 
 [Open the GitHub Pages demo](https://fsrkh12-arch.github.io/mini-todo-app/)
 
-The public demo stores tasks locally in the visitor's browser. The original Flask application remains unchanged.
+The public demo includes Create account, Login, and Logout controls. It saves the demo account and tasks locally in the visitor's browser, so it is separate from the Flask database.
 
 ## Security in the Flask app
 
