@@ -1,26 +1,9 @@
 # To-Do List
 
-This was my first project, created for my CS50 completion assignment. As an A-level student, I needed a way to organize my study schedule: keeping track of past papers to practice, concepts to review, and other tasks. I built this small Flask application around that need and asked friends to test it before submitting the assignment.
+[Open the app](https://fsrkh12-arch.github.io/mini-todo-app/)
 
-The project helped me explore how a web interface, user accounts, and a database fit together.
+This was my first project, created for my CS50 completion assignment. As an A-level student, I needed a way to organize past papers, concepts to review, and other study tasks. I asked friends to test it before submitting the assignment.
 
-## Try it
+The Flask application lets users create an account, sign in, and manage their own tasks. Building it helped me understand how a web interface, user accounts, and a database fit together.
 
-[Open the browser demo](https://fsrkh12-arch.github.io/mini-todo-app/)
-
-The demo runs entirely in your browser. Its account and task data stay in that browser; it does not connect to the Flask application or sync between devices. Use sample credentials rather than a password you use elsewhere.
-
-## Flask application
-
-The Python version lets users register, sign in, add tasks, and delete their own tasks. It uses Flask and Jinja for the web interface, SQLite through the CS50 library for storage, and Werkzeug to hash passwords. The repository currently includes the SQLite database used by the application.
-
-To run it locally, install Python, then from the repository directory run:
-
-```sh
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-flask --app app run
-```
-
-Open the local address printed by Flask. For deployment, configure a private `SECRET_KEY`; the default generates a new key when the process starts. This is a learning project, not a security-audited production service.
+The linked browser demo is separate from the Flask app. Its accounts and tasks stay in the current browser and do not sync between devices.
