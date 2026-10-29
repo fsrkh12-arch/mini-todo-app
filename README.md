@@ -1,32 +1,24 @@
-# TODO LIST
+# To-Do List
 
-## Live browser demo
+A small Flask application for keeping a personal task list. It was built to explore how a web interface, user accounts, and a database fit together.
 
-[Open the GitHub Pages demo](https://fsrkh12-arch.github.io/mini-todo-app/)
+## Try it
 
-The public demo includes Create account, Login, and Logout controls. It saves the demo account and tasks locally in the visitor's browser, so it is separate from the Flask database.
+[Open the browser demo](https://fsrkh12-arch.github.io/mini-todo-app/)
 
-## Security in the Flask app
+The demo runs entirely in your browser. Its account and task data stay in that browser; it does not connect to the Flask application or sync between devices. Use sample credentials rather than a password you use elsewhere.
 
-Accounts use Werkzeug password hashing. Session cookies are HTTP-only and use SameSite=Lax; set a SECRET_KEY environment variable when deploying the Flask app.
-#### This is a simple web app where you can keep track of all the things you need to do. Basically, it’s a to-do list that lives on the internet, so you can access it from anywhere. You can make an account, log in, and have your own list that nobody else can see. You sign up with a username and a password. The password is kept safe and secure, so even if someone got access to the database, they wouldn’t be able to read it. After signing up, your information is saved in a database. Then, whenever you log in, the app knows who you are and shows your tasks. Only you can see your list, which keeps everything private.
+## Flask application
 
-#### When you log in, you are taken to a page that shows all the tasks you have added. It’s just a simple list, but it does the job. You can type a new task in a box, click a button, and it’s added to your list. The app saves it in the database with your user ID, so it knows which tasks belong to which user. Every task is tied to your account. Other users cannot see your tasks or change them in any way, which is nice because it keeps your stuff private and separate.
+The Python version lets users register, sign in, add tasks, and delete their own tasks. It uses Flask and Jinja for the web interface, SQLite through the CS50 library for storage, and Werkzeug to hash passwords. The repository currently includes the SQLite database used by the application.
 
-#### Tasks appear in a clear list, and each one has a delete button next to it. If you finish a task, you can click delete, and the task disappears from your list. Behind the scenes, the app removes it from the database. The page updates automatically, so you don’t have to refresh it or do anything special. You always see the current list of tasks. This makes it really easy to stay on top of what you need to do.
+To run it locally, install Python, then from the repository directory run:
 
-#### The app is built using Python and Flask. Flask is a framework that runs the server and handles all the requests from users. Whenever you add or delete a task, Flask communicates with the database and updates your task list. The database is SQLite, which is simple but reliable. SQLite stores all users and their tasks. Each user has a unique ID, and every task points to a user, so everything stays organized. The app knows which task belongs to which person, even if lots of people are using it at the same time.
+```sh
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+flask --app app run
+```
 
-#### The app also uses a library called CS50 SQL, which makes it easier to run commands on the database. Adding a task, deleting a task, or getting all tasks for a specific user becomes straightforward. To show tasks on the page, the app uses Jinja templates. Jinja lets the page include dynamic content, which means the tasks you see are always coming straight from the database. When you add or remove a task, Jinja updates the page automatically, so you always see the latest version of your list.
-
-#### The interface uses CSS for styling. It’s simple and clean. The task list is in the center of the page, and the buttons for adding and deleting tasks are easy to find. The background has a color that makes the page look nice, and the sections are visually separated so your eyes can focus on your tasks. The design isn’t fancy, but it works, and it’s easy for anyone to use without confusion.
-
-#### Security is an important part of the app. You have to log in to see your tasks. Passwords are stored in a hashed form, which is a way to keep them safe so no one can read them even if they access the database. Sessions are used to keep track of who is logged in. A session ensures that once you log in, you stay logged in while using the app. If you log out, the session ends, and your tasks are no longer visible until you log in again. This is important because it keeps your data secure and private.
-
-#### Basically, this app shows how a basic web application works. You can register, log in, add tasks, delete tasks, and see your list updated in real time. Each user has their own private list. Flask handles the server-side logic, SQLite stores the data, Jinja shows tasks dynamically, and CSS makes it look decent.
-
-#### It’s simple but functional. You can organize your day, track what needs to be done, and remove finished tasks. The app supports multiple users at the same time, and each user has a separate account. All tasks are saved in the database, so you don’t lose them if you close the page or switch devices. You can log in from your phone, tablet, or computer, and see the same list of tasks.
-
-#### Overall, it’s a small but complete project that covers the main parts of web development: backend programming, database management, authentication, and front-end display. You can manage tasks safely, see updates instantly, and keep your daily activities organized. Even though it’s not complicated, it gives a clear picture of how a full web application works from start to finish.
-
-#### In short, this to-do list web app is simple, secure, and useful. It lets users register, log in, add and delete tasks, and manage their own task lists. The interface is clean, the tasks are private, and everything updates in real time. It’s a great example of building a complete web application that anyone can use to stay organized.
+Open the local address printed by Flask. For deployment, configure a private `SECRET_KEY`; the default generates a new key when the process starts. This is a learning project, not a security-audited production service.
