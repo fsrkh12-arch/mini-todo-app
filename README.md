@@ -1,6 +1,8 @@
 # To-Do List
 
-A small Flask application for keeping a personal task list. It was built to explore how a web interface, user accounts, and a database fit together.
+This was my first project, created for my CS50 completion assignment. As an A-level student, I needed a way to organize my study schedule: keeping track of past papers to practice, concepts to review, and other tasks. I built this small Flask application around that need and asked friends to test it before submitting the assignment.
+
+The project helped me explore how a web interface, user accounts, and a database fit together.
 
 ## Try it
 
