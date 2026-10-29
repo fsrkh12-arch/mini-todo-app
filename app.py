@@ -1,4 +1,5 @@
 import os
+import sqlite3
 from functools import wraps
 
 from flask import Flask, render_template, request, redirect, session, flash
@@ -9,6 +10,26 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", os.urandom(32))
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+
+# Create an empty database on first run, without distributing user data.
+with sqlite3.connect("tasks.db") as connection:
+    connection.executescript("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL UNIQUE,
+            hash TEXT NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS tasks (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            task TEXT NOT NULL,
+            user_id INTEGER NOT NULL,
+            completed INTEGER DEFAULT 0,
+            due_date TEXT,
+            priority INTEGER DEFAULT 0,
+            category TEXT,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        );
+    """)
 
 # Connect to database
 db = SQL("sqlite:///tasks.db")
